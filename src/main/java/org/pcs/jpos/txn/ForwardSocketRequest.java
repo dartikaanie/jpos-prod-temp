@@ -15,8 +15,6 @@ import org.jpos.transaction.TransactionParticipant;
 import org.jpos.util.Log;
 import org.jpos.util.NameRegistrar;
 
-import javax.print.attribute.standard.MediaSize;
-
 public class ForwardSocketRequest implements TransactionParticipant, Configurable  {
     
     Log log = Log.getLog("Q2", getClass().getName());
@@ -29,50 +27,44 @@ public class ForwardSocketRequest implements TransactionParticipant, Configurabl
         
         Context ctx = (Context)context;
         ISOMsg reqMsg = (ISOMsg) ctx.get("REQUEST_MSG");
+        log.info("ForwardSocketRequest-start: " + reqMsg);
 
         // Select Host Backend
         String destination = "";
-        if(reqMsg.getString(24).equalsIgnoreCase("041")){
-            destination = cfg.get("destination", "bri-host-41");
-        } else if(reqMsg.getString(24).equalsIgnoreCase("042")){
-            destination = cfg.get("destination", "bri-host-42");
-        } else if(reqMsg.getString(24).equalsIgnoreCase("043")){
-            destination = cfg.get("destination", "bri-host-43");
-        } else if(reqMsg.getString(24).equalsIgnoreCase("044")){
-            destination = cfg.get("destination", "bri-host-44");
-        } else if(reqMsg.getString(24).equalsIgnoreCase("045")){
-            destination = cfg.get("destination", "bri-host-45");
-        } else if(reqMsg.getString(24).equalsIgnoreCase("048")){
-            destination = cfg.get("destination", "bri-host-48");
-        } else if(reqMsg.getString(24).equalsIgnoreCase("052")){
-            destination = cfg.get("destination", "bri-host-52");
-        } else if(reqMsg.getString(24).equalsIgnoreCase("006")){
-            destination = cfg.get("destination", "bri-host-06");
-        }  else if(reqMsg.getString(24).equalsIgnoreCase("007")){
-            destination = cfg.get("destination", "bri-host-07");
-        } else if(reqMsg.getString(24).equalsIgnoreCase("015")){
-            destination = cfg.get("destination", "bri-host-15");
-        } else if(reqMsg.getString(24).equalsIgnoreCase("023")){
-            destination = cfg.get("destination", "bri-host-23");
-        } else if(reqMsg.getString(24).equalsIgnoreCase("095")){
-            destination = cfg.get("destination", "bri-host-95");
+        if(reqMsg.getString(24).equalsIgnoreCase("032")){
+            destination = cfg.get("destination", "bri-host-32");
+        } else if(reqMsg.getString(24).equalsIgnoreCase("033")){
+            destination = cfg.get("destination", "bri-host-33");
+        } else if(reqMsg.getString(24).equalsIgnoreCase("034")){
+            destination = cfg.get("destination", "bri-host-34");
+        } else if(reqMsg.getString(24).equalsIgnoreCase("036")){
+            destination = cfg.get("destination", "bri-host-36");
+        } else if(reqMsg.getString(24).equalsIgnoreCase("037")){
+            destination = cfg.get("destination", "bri-host-37");
+        } else if(reqMsg.getString(24).equalsIgnoreCase("038")){
+            destination = cfg.get("destination", "bri-host-38");
+        }else if(reqMsg.getString(24).equalsIgnoreCase("030")){
+            destination = cfg.get("destination", "bri-host-30");
         }
 
+
+        int b60Leng = reqMsg.getString(60).length();
+      if(reqMsg.hasField(63) && reqMsg.hasField(60)){
+        log.info("settle : yes");if(b60Leng > 6){
+        if(reqMsg.getString(3).equalsIgnoreCase("920000")){
+               reqMsg.set(60, reqMsg.getString(60).substring(b60Leng - 6));
+           } else if(reqMsg.getString(3).equalsIgnoreCase("960000")){
+                  reqMsg.set(60, reqMsg.getString(60).substring(b60Leng - 6));
+           }
+         }
+      }
+
+        log.info("destination : " + destination);
         ISOMsg rsp = new ISOMsg();
-        if(reqMsg.hasField(63) && reqMsg.hasField(60)){
-                int b60Lenght = reqMsg.getString(60).length();
-                    log.info("settle : yes");
-                     if(b60Lenght > 6){
-                        if(reqMsg.getString(3).equalsIgnoreCase("920000")){
-                           reqMsg.set(60, reqMsg.getString(60).substring(b60Lenght - 6));
-                        } else if(reqMsg.getString(3).equalsIgnoreCase("960000")){
-                          reqMsg.set(60, reqMsg.getString(60).substring(b60Lenght - 6));
-                        }
-                     }
-                }
 
         try {
         	NACChannel chn = (NACChannel) NameRegistrar.get("channel." + destination);
+            log.info("chn : " + chn);
             if (!chn.isConnected()) {
                 log.info("ForwardSocketRequest-prepare: not Connected");
             } else {
@@ -80,6 +72,9 @@ public class ForwardSocketRequest implements TransactionParticipant, Configurabl
                 
                 QMUX qmux = (QMUX) NameRegistrar.get("mux." + destination + "-mux");
                 reqMsg.setHeader(ISOUtil.hex2byte("600" + reqMsg.getString(24) + "0000"));
+                
+                log.info("timeout: "+ timeout);
+                log.info("reqMsg: "+ reqMsg);
                 rsp = qmux.request(reqMsg, timeout);
                 
                 log.info("Send iso Message : \n rsp: " + rsp + "\n hex: " + ISOUtil.byte2hex(rsp.pack()));
@@ -91,6 +86,9 @@ public class ForwardSocketRequest implements TransactionParticipant, Configurabl
             log.info("Log ISOException - error : " + isoe.getMessage());
         } catch (NameRegistrar.NotFoundException ex) {
             ex.printStackTrace();
+            log.info("Log NotFoundException - error : " + ex.getMessage());
+            log.info("24 : " + reqMsg.getString(24));
+            log.info("24 if : " + reqMsg.getString(24).equalsIgnoreCase("030"));
             log.info("Log NotFoundException - error : " + ex.getMessage());
         } 
     	return PREPARED | NO_JOIN;
