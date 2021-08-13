@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <srv name="partner" class="org.jpos.q2.iso.QServer" logger="Q2">
-    <attr name="port" type="java.lang.Integer">1001</attr>
+    <attr name="port" type="java.lang.Integer">8011</attr>
     <attr name="minSessions" type="java.lang.Integer">1</attr>
     <attr name="maxSessions" type="java.lang.Integer">100</attr>
     <channel class="org.jpos.iso.channel.NACChannel" packager="org.jpos.iso.packager.GenericPackager" logger="Q2"> 
