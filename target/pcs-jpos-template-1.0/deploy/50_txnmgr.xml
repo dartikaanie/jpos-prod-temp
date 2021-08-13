@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<txnmgr class="org.jpos.transaction.TransactionManager" logger="Q2">
+    <property name="queue" value="txnmgr" />
+    <property name="sessions" value="5" />
+    <property name="debug" value="true" />
+    <property name="retry-interval" value="250" />
+    <participant class="org.pcs.jpos.txn.ForwardSocketRequest" logger="Q2" >
+        <property name="timeout" value="60000" />
+    </participant>
+    <participant class="org.pcs.jpos.txn.SendSocketResponse" logger="Q2" />
+</txnmgr>

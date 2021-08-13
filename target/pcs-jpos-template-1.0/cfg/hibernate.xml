@@ -1,0 +1,12 @@
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.password">artajasa_debit</property>
+        <property name="hibernate.connection.url">jdbc:mysql:http://45.77.174.213:888/</property>
+        <property name="hibernate.connection.username">artajasa_debit</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="show_sql">true</property>
+        <mapping resource="database/test.xml"></mapping>
+    </session-factory>
+</hibernate-configuration>

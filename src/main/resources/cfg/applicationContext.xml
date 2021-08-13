@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <context:annotation-config />
+    <context:component-scan base-package="com.acs.xw.dao" />
+    <context:component-scan base-package="com.acs.xw.service" />
+    <context:property-placeholder location="cfg/jdbc.properties" />
+     
+	<!-- <bean id="q2" class="com.acs.Main" init-method="initQ2" destroy-method="stopQ2">
+        <property name="path" value="deploy" />
+    </bean> -->
+     	
+    <bean id="ds" class="org.postgresql.ds.PGSimpleDataSource">
+        <property name="serverName" value="${database.host}"/>
+        <property name="portNumber" value="${database.port}"/>
+        <property name="databaseName" value="${database.name}"/>
+        <property name="user" value="${database.username}"/>
+        <property name="password" value="${database.password}"/>
+    </bean>
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="ds"/>
+        <property name="loadTimeWeaver">
+            <bean class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver"/>
+        </property>
+        <property name="packagesToScan" value="com.acs.xw.entity"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="databasePlatform" value="${hibernate.dialect}" />
+                <property name="showSql" value="false" />
+                <property name="generateDdl" value="true" />
+            </bean>
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.format_sql">true</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+        <property name="jpaDialect">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
+        </property>
+    </bean>	
+	<bean id="sharedEntityManager" name="sharedEntityManager" class="org.springframework.orm.jpa.support.SharedEntityManagerBean">
+        <property name = "entityManagerFactory" ref="entityManagerFactory"/>
+    </bean> 
+    <tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<!-- External Database 1 : Database Bus ACS -->
+	<bean id="dsBus" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="net.sourceforge.jtds.jdbc.Driver" />
+        <property name="url" value="${database.bus.url}" />
+        <property name="username" value="${database.bus.username}" />
+        <property name="password" value="${database.bus.password}" />
+    </bean>   
+    <bean id="entityManagerFactoryBus" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dsBus"/>
+        <property name="loadTimeWeaver">
+            <bean class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver"/>
+        </property>
+        <property name="packagesToScan" value="com.acs.xw.entity"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="databasePlatform" value="org.hibernate.dialect.SQLServerDialect" />
+                <property name="showSql" value="true" />
+                <property name="generateDdl" value="false" />
+            </bean>
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.format_sql">true</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="transactionManagerBus" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactoryBus"/>
+        <property name="jpaDialect">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaDialect" />
+        </property>
+    </bean>
+    <bean id="sharedEntityManagerBus" name="sharedEntityManagerBus" class="org.springframework.orm.jpa.support.SharedEntityManagerBean">
+        <property name = "entityManagerFactory" ref="entityManagerFactoryBus"/>
+    </bean>
+    <tx:annotation-driven transaction-manager="transactionManagerBus" />
+    
+</beans>
