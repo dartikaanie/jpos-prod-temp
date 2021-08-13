@@ -46,20 +46,8 @@ public class ForwardSocketRequest implements TransactionParticipant, Configurabl
         }else if(reqMsg.getString(24).equalsIgnoreCase("030")){
             destination = cfg.get("destination", "bri-host-30");
         }
-
-
-        int b60Leng = reqMsg.getString(60).length();
-      if(reqMsg.hasField(63) && reqMsg.hasField(60)){
-        log.info("settle : yes");if(b60Leng > 6){
-        if(reqMsg.getString(3).equalsIgnoreCase("920000")){
-               reqMsg.set(60, reqMsg.getString(60).substring(b60Leng - 6));
-           } else if(reqMsg.getString(3).equalsIgnoreCase("960000")){
-                  reqMsg.set(60, reqMsg.getString(60).substring(b60Leng - 6));
-           }
-         }
-      }
-
-        log.info("destination : " + destination);
+        
+         log.info("destination : " + destination);
         ISOMsg rsp = new ISOMsg();
 
         try {
