@@ -1,4 +1,0 @@
-<spark name="spark-server" class="spark.SparkBean" >
-    <property name="queue-timeout" value= "60000" />
-    <property name="queue-timeout" value= "60000" />
-</spark>

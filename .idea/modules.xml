@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/BRI-FMS-Backend-Jpos-Host.iml" filepath="$PROJECT_DIR$/.idea/BRI-FMS-Backend-Jpos-Host.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/BRI-FMS-Backend-Jpos-Host-Prod.iml" filepath="$PROJECT_DIR$/.idea/BRI-FMS-Backend-Jpos-Host-Prod.iml" />
     </modules>
   </component>
 </project>

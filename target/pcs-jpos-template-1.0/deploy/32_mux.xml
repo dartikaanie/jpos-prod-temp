@@ -1,0 +1,10 @@
+<mux class="org.jpos.q2.iso.QMUX" logger="Q2" name="bri-host-32-mux">
+    <in>bri-host-32-receive</in>
+    <out>bri-host-32-send</out>
+    <ready>bri-host-32.ready</ready>
+    <unhandled>bri-host-32-unhandled</unhandled>
+    <request-listener class="org.pcs.jpos.iso.SocketISORequestHandler" logger="Q2" realm="connector">
+        <property name="txnmgr" value="txnmgr" />
+    </request-listener>
+    <property name="debug" value="true" />
+</mux> 
