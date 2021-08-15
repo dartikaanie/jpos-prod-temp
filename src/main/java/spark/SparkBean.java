@@ -22,7 +22,7 @@ import database.DBTransaction;
  * @author ErwinSn
  */
 public class SparkBean extends QBeanSupport {
-
+    
     public static int JSON_INDENT = 3;
     public static String DEFAULT_CONTENT_TYPE = "application/json";
     public static long DEFAULT_QUEUE_TIMEOUT = 120000l;
@@ -34,23 +34,23 @@ public class SparkBean extends QBeanSupport {
     public void initService() {
         NameRegistrar.register(getName(), this);
 	}
-
+	
     @Override
     public void startService() throws NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ConfigurationException {
         log.info("Starting Spark Services...");
         Spark.setPort(this.cfg.getInt("port", DEFAULT_PORT));
         Spark.setIpAddress(this.cfg.get("hostname", DEFAULT_BINDING_HOSTNAME));
-
+        
         String[] basepaths = this.cfg.getAll("basepath");
         String[] contentTypes = this.cfg.getAll("content-type");
         String[] queueNames = this.cfg.getAll("queue");
         long[] queueTimeouts = this.cfg.getLongs("queue-timeout");
-
+        
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
+        
         for(int i = 0; i < basepaths.length; i++) {
             final int iValue = i;
-
+          
             Spark.post(new Route(basepaths[iValue], contentTypes[iValue]) {
                 @Override
                 public Object handle(Request request, Response response) {
@@ -58,7 +58,7 @@ public class SparkBean extends QBeanSupport {
                 log.info("Receive message body : " + request.body());
                 JSONObject reqObj = new JSONObject(request.body());
                 String reqDate = sdf.format(new Date());
-
+                
 	                if(reqObj.has("isoFields")) {
 	                	Context reqContext = new Context();
 	                	if(reqObj.has("transaction_date")) {
@@ -71,9 +71,9 @@ public class SparkBean extends QBeanSupport {
 	                    field24.put("bit", 24);
 	                    field24.put("value","009");
 	                    reqObj.getJSONArray("isoFields").put(field24);
-
+	                    
 	                    String f11 = ""; String f41 = ""; String f0 = ""; String f3 = ""; String f42 = "";
-
+	                    
 	                    for (int i = 0; i < array.length(); i++) {
 	                        JSONObject obj = array.getJSONObject(i);
 	                        if ((Integer)obj.get("bit") == 0) {
@@ -89,7 +89,7 @@ public class SparkBean extends QBeanSupport {
 	                        }
 	                    }
 	                    String queueKey = f11 + f41;
-
+	                    
 	                    reqContext.put("REQUEST_MSG", reqObj);
 	                    Space sp = SpaceFactory.getSpace();
 	                    sp.out(queueNames[iValue], reqContext, queueTimeouts[iValue]);
@@ -97,7 +97,7 @@ public class SparkBean extends QBeanSupport {
 	                    JSONObject rspObj = (JSONObject) rspContext.get("RESPONSE_MSG");
 	                    log.info("Send message body : " + rspObj);
 	                    response.header("Content-Type", request.contentType());
-
+	                    
 	                    JSONObject objResp = rspObj;
 	                    if(f0.equals("0500")) {
 	                    	objResp.put("listTrace", reqObj.getJSONArray("listTrace"));
@@ -135,9 +135,9 @@ public class SparkBean extends QBeanSupport {
 		                    JSONObject rspObj = (JSONObject) rspContext.get("RESPONSE_MSG");
 			                arrRespon.put(rspObj);
 		                }
-		                result.put("batchUpload", arrRespon);
-	                    log.info("Send message body : " + result);
-	                    response.header("Content-Type", request.contentType());
+		                result.put("batchUpload", arrRespon); 
+	                    log.info("Send message body : " + result); 
+	                    response.header("Content-Type", request.contentType());  
 		                return result.toString();
 	                }else {
 	                	return new JSONObject();

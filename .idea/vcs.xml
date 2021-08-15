@@ -2,8 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/BRI-FMS-Backend-Jpos-Host-Prod" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/pcs-jpos-resources" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/target/pcs-jpos-resources" vcs="Git" />
   </component>
 </project>

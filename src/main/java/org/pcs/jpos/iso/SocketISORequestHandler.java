@@ -32,7 +32,7 @@ public class SocketISORequestHandler implements ISORequestListener, LogSource, C
     public boolean process(ISOSource source, ISOMsg m) {
         
         log.info("SocketISORequestHandler-start");
-
+        
         // Create new request context object
         Context reqContext = new Context();
         

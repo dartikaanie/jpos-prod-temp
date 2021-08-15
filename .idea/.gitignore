@@ -2,7 +2,7 @@
 /shelf/
 /workspace.xml
 # Datasource local storage ignored files
-/../../../../../../../../../:\PCS INDONESIA\PROJECT\BRI - FMS\apps\backend jpos\BRI-FMS-Backend-Jpos-Host-Prod\BRI-FMS-Backend-Jpos-Host-Prod\.idea/dataSources/
+/dataSources/
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
