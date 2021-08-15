@@ -3,7 +3,7 @@ FROM java:8-jdk
 
 MAINTAINER  Author Name <boys.mtv@gmail.com>
 
-EXPOSE 1001
+EXPOSE 8011
 
 COPY target/pcs-jpos-template-1.0/bin/ /jpos/bin/
 COPY target/pcs-jpos-template-1.0/cfg/ /jpos/cfg/
