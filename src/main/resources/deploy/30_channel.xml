@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <channel-adaptor name='bri-host-30' class="org.jpos.q2.iso.ChannelAdaptor"
-	logger="Q2">
-	  <channel class="org.jpos.iso.channel.NACChannel"  logger="Q2" packager="org.jpos.iso.packager.GenericPackager" header="6000300000">
-			<property name="packager-config" value="cfg/packager/iso87binary.xml" />
-        	<property name="host" value="172.16.194.37" />
-        	<property name="port" value="7011" />
-			<property name="keep-alive" value="true" />
-			
-	  	</channel>
-	  	<max-connection>8</max-connection>
-	  	<in>bri-host-30-send</in>
-	  	<out>bri-host-30-receive</out>
-    	<unhandled>bri-host-30-unhandled</unhandled>
-    	<ready>bri-host-30.ready</ready>
-	  	<reconnect-delay>10000</reconnect-delay>
+				 logger="Q2">
+	<channel class="org.jpos.iso.channel.NACChannel"  logger="Q2" packager="org.jpos.iso.packager.GenericPackager" header="6000300000">
+		<property name="packager-config" value="cfg/packager/iso87binary.xml" />
+		<property name="host" value="172.16.194.37" />
+		<property name="port" value="7011" />
+		<property name="keep-alive" value="true" />
+		<property name="timeout" value="2700000"/>
+	</channel>
+	<max-connection>8</max-connection>
+	<in>bri-host-30-send</in>
+	<out>bri-host-30-receive</out>
+	<unhandled>bri-host-30-unhandled</unhandled>
+	<ready>bri-host-30.ready</ready>
+	<reconnect-delay>10000</reconnect-delay>
 </channel-adaptor>

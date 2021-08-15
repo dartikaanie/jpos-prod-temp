@@ -52,7 +52,7 @@ public class ForwardSocketRequest implements TransactionParticipant, Configurabl
 
         try {
         	NACChannel chn = (NACChannel) NameRegistrar.get("channel." + destination);
-            log.info("chn : " + chn);
+            log.info("chn : " + destination);
             if (!chn.isConnected()) {
                 log.info("ForwardSocketRequest-prepare: not Connected");
             } else {
